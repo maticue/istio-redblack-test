@@ -1,0 +1,1 @@
+export CICD_APPLICATION_NAMESPACE="paintme"

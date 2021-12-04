@@ -1,0 +1,23 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: {{ include "paintme-traffic.fullname" . }}
+  labels:
+    {{- include "paintme-traffic.labels" . | nindent 4 }}
+spec:
+  host: paintme
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    loadBalancer:
+      simple: RANDOM
+  subsets:
+  - name: black
+    labels:
+      app.kubernetes.io/color-version: black
+      version: black
+  - name: red
+    labels:
+      app.kubernetes.io/color-version: red
+      version: red
+      

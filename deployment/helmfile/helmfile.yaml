@@ -1,0 +1,34 @@
+templates:
+  default: &default
+    wait: true
+    namespace: {{ env "CICD_APPLICATION_NAMESPACE" | default "paintme" }}
+    missingFileHandler: Debug
+    values:
+    - config/values.yaml
+    - config/values.yaml.gotmpl
+    - config/{{`{{ .Release.Name }}`}}/values.yaml
+    - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+
+releases:
+  - name: paintme-black
+    <<: *default
+    chart: ../helm/paintme
+    timeout: 300
+    labels:
+      app: paintme
+      version: black
+
+  - name: paintme-red
+    <<: *default
+    chart: ../helm/paintme
+    timeout: 300
+    labels:
+      app: paintme
+      version: red
+
+  - name: paintme-traffic
+    <<: *default
+    chart: ../helm/paintme-traffic
+    timeout: 300
+    labels:
+      app: paintme-traffic

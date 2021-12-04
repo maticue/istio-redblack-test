@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: gateway-{{ include "paintme-traffic.fullname" . }}
+  labels:
+    {{- include "paintme-traffic.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - {{ include "paintme-traffic.fullname" . }}
+  http:
+    - match:
+        - uri:
+            exact: /paintme
+        - uri:
+            prefix: /favicon.ico
+      rewrite:
+        uri: /
+      route:
+
+        - destination:
+            host: paintme
+            subset: black
+            port:
+              number: 8080
+          weight: {{ .Values.traffic.paintme.black.weight | default "0" }}
+        - destination:
+            host: paintme
+            subset: red
+            port:
+              number: 8080
+          weight: {{ .Values.traffic.paintme.red.weight | default "0" }}

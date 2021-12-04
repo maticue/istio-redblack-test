@@ -1,0 +1,9 @@
+appName: paintme
+service:
+  port: 8080
+traffic:
+  paintme:
+    black:
+      weight: 75
+    red:
+      weight: 25
